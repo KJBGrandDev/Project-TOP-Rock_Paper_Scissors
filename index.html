@@ -3,9 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rock Paper Scissors - Premium Edition</title>
+    <!-- Google Fonts for premium typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel='stylesheet' href="./style.css">
     <script src="./script.js" defer></script>
 </head>
 <body>
+    <!-- Header Section -->
+    <header class="game-header">
+        <h1 class="game-title">SHIFUMI</h1>
+        <p class="game-subtitle">
+            First to reach <span class="highlight-points">5 points</span> wins
+        </p>
+    </header>
+
+    <!-- Scoreboard & Arena Main Container -->
+    <main class="app-container">
+        
+        <!-- Scoreboard Card -->
+        <div class="scoreboard">
+            <!-- Player Score Column -->
+            <div class="score-column divider">
+                <span class="score-label">Human</span>
+                <span id="displayPlayerScore" class="score-number score-human">0</span>
+            </div>
+            
+            <!-- Computer Score Column -->
+            <div class="score-column">
+                <span class="score-label">Computer</span>
+                <span id="displayComputerScore" class="score-number score-computer">0</span>
+            </div>
+        </div>
+
+        <!-- Combat Arena Display -->
+        <div class="arena">
+            
+            <!-- Player Side Choice -->
+            <div class="fighter-pane">
+                <span class="pane-title">Player Choice</span>
+                <div class="visual-circle player-circle">
+                    <span id="displayPlayerChoiceVisual">❓</span>
+                </div>
+                <span id="displayPlayerChoice" class="choice-name choice-human-name">--</span>
+            </div>
+
+            <!-- VS Badge -->
+            <div class="versus-tag">VS</div>
+
+            <!-- Computer Side Choice -->
+            <div class="fighter-pane">
+                <span class="pane-title">Bot Choice</span>
+                <div class="visual-circle computer-circle">
+                    <span id="displayComputerChoiceVisual">❓</span>
+                </div>
+                <span id="displayComputerChoice" class="choice-name choice-computer-name">--</span>
+            </div>
+
+        </div>
+
+        <!-- Live Round Feedback Section -->
+        <div class="feedback-box">
+            <p id="displayRoundWinner" class="round-winner-text winner-text-default">
+                Pick your weapon to initiate round!
+            </p>
+        </div>
+
+        <!-- Weapon Choice Controls -->
+        <div class="weapon-controls">
+            <!-- Rock Weapon -->
+            <button id="rockBtn" data-choice="rock" class="weapon-btn">
+                <span class="weapon-emoji">🪨</span>
+                <span class="weapon-label">Rock</span>
+            </button>
+
+            <!-- Paper Weapon -->
+            <button id="paperBtn" data-choice="paper" class="weapon-btn">
+                <span class="weapon-emoji">📄</span>
+                <span class="weapon-label">Paper</span>
+            </button>
+
+            <!-- Scissors Weapon -->
+            <button id="scissorsBtn" data-choice="scissors" class="weapon-btn">
+                <span class="weapon-emoji">✂️</span>
+                <span class="weapon-label">Scissors</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+        Designed & developed with ❤️
+    </footer>
+
+    <!-- Custom Modal Popup for Match Finish -->
+    <div id="winnerModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <span id="modalTrophy" class="modal-emoji">🏆</span>
+            <h2 id="modalTitle" class="modal-heading">Human Wins!</h2>
+            <p id="modalDescription" class="modal-desc">Score achievement reached!</p>
+            <button onclick="closeModalAndReset()" class="modal-action-btn">
+                Play Again
+            </button>
+        </div>
+    </div>
 </body>
 </html>

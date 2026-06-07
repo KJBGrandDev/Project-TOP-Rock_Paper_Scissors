@@ -1,78 +1,85 @@
+//Query Selector for Text UI
+const displayPlayerScore = document.querySelector('#displayPlayerScore');
+const displayComputerScore = document.querySelector('#displayComputerScore');
+const displayPlayerChoice = document.querySelector('#displayPlayerChoice');
+const displayComputerChoice = document.querySelector('#displayComputerChoice');
+const displayRoundWinner = document.querySelector('#displayRoundWinner');
 
+//Query Selector for Choices
+const choiceBtn = document.querySelectorAll('[data-choice]');
 
-function getComputerChoice(){
-    let randomNum = Math.random();
-
-    if(randomNum >= 0.7){
-        return "rock";
-    } else if (randomNum >= 0.3){
-        return "scissors"
-    } else {
-        return "paper"
-    }
+const WINNING_CONDITIONS = {
+    rock: 'scissors',
+    scissors: 'paper',
+    paper: 'rock'
 }
 
-function getHumanChoice(){
-    let choice = prompt("What is your move [rock, paper, scissors]: ");
+const GAME_STATE = {
+    humanScore: 0,
+    computerScore: 0,
+    humanMove: ''
+}
 
-    return choice;
+choiceBtn.forEach(button => {
+    button.addEventListener('click', () => {
+        GAME_STATE.humanMove = button.dataset.choice;
+        playGame();
+    });
+});
+
+function getComputerChoice(){
+    const choices = ['rock', 'scissors', 'paper'];
+    const randomNum = Math.random();
+    //1.0 - 0.7 = rock
+    if(randomNum >= 0.7) return choices[0];
+    //0.69 - 0.3 = scissors
+    if(randomNum >= 0.3) return choices[1];
+    //0.3 -> 0 = paper
+    return choices[2];
+}
+
+function playRound(human,computer){
+    if(human === computer){
+        displayRoundWinner.textContent = `It's a tie! Both picked ${human}`;
+        return;
+    }
+
+    if(WINNING_CONDITIONS[human] === computer){
+        GAME_STATE.humanScore++;
+        displayRoundWinner.textContent = `Human Wins! ${human} > ${computer}`
+    } else {
+        GAME_STATE.computerScore++;
+        displayRoundWinner.textContent = `Computer Wins! ${human} < ${computer}`
+    }
 }
 
 function playGame(){
-    let humanScore = 0;
-    let computerScore = 0;
+    const humanSelection = GAME_STATE.humanMove;
+    const computerSelection = getComputerChoice();
 
-    function playRound(humanChoice, computerChoice){
-        let caseHuman = humanChoice.toLowerCase();
-        let caseComputer = computerChoice.toLowerCase();
+    displayPlayerChoice.textContent = humanSelection;
+    displayComputerChoice.textContent = computerSelection;
 
-        if(caseHuman === 'rock' && caseComputer === 'rock'){
-            console.log("It's a tie! Rock vs Rock");
-        } else if ((caseHuman === 'rock' && caseComputer === 'scissors')){
-            humanScore++;
-            console.log("Human Wins! Rock > Scissors");
-        } else if ((caseHuman === 'rock' && caseComputer === 'paper')){
-            computerScore++;
-            console.log("Computer Wins! Rock < Paper");
-        }
+    playRound(humanSelection,computerSelection);
 
-        if(caseHuman === 'scissors' && caseComputer === 'scissors'){
-            console.log("It's a tie! Scissors vs Scissors");
-        } else if ((caseHuman === 'scissors' && caseComputer === 'rock')){
-            computerScore++;
-            console.log("Computer Wins! Scissors < Rock");
-        } else if ((caseHuman === 'scissors' && caseComputer === 'paper')){
-            humanScore++;
-            console.log("Human Wins! Scissors > Paper");
-        }
+    displayPlayerScore.textContent = GAME_STATE.humanScore;
+    displayComputerScore.textContent = GAME_STATE.computerScore;
 
-        if(caseHuman === 'paper' && caseComputer === 'paper'){
-            console.log("It's a tie! Paper vs Paper");
-        } else if ((caseHuman === 'paper' && caseComputer === 'rock')){
-            humanScore++;
-            console.log("Human Wins! Paper > Rock");
-        } else if ((caseHuman === 'paper' && caseComputer === 'scissors')){
-            computerScore++;
-            console.log("Computer Wins! Paper < Scissors");
-        }
+    if(GAME_STATE.humanScore === 5 || GAME_STATE.computerScore === 5){
+        const winner = GAME_STATE.humanScore === 5 ? 'Human' : 'Computer';
+        alert(`${winner} wins the entire match!`);
+        resetGame();
     }
-
-    for(let i = 0; i < 5; i++){
-        const humanSelection = getHumanChoice();
-        console.log(`Human Chooses: ${humanSelection}`)
-        const computerSelection = getComputerChoice();
-        console.log(`Computer Chooses: ${computerSelection}`)
-
-        playRound(humanSelection,computerSelection);
-
-        console.log(`Human Score: ${humanScore}`);
-        console.log(`Computer Score: ${computerScore}`);
-        console.log("-------------------------------------------------")
-    }
-
-    let winner = (humanScore > computerScore) ? 
-        alert(`Human Wins! Getting a score of ${humanScore} points`) :
-        alert(`Computer Wins! Getting a score of ${computerScore} points`)
 }
 
-playGame();
+function resetGame(){
+    GAME_STATE.humanScore = 0;
+    GAME_STATE.computerScore = 0;
+    GAME_STATE.humanMove = '--';
+
+    displayPlayerScore.textContent = 0;
+    displayComputerScore.textContent = 0;
+    displayRoundWinner.textContent = '--';
+    displayPlayerChoice.textContent = '--';
+    displayComputerChoice.textContent = '--';
+}
